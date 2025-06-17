@@ -1,4 +1,35 @@
-/.env
-/__pycache__
-/chroma_db
-/unex_content.json
+# Archivos de entorno y configuración sensible
+.env
+.env.local
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Base de datos vectorial (se regenera)
+chroma_db/
+
+# Archivos de datos generados (se regeneran)
+unex_content.json
+unex_content_enhanced.json
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Distribución
+build/
+dist/
+*.egg-info/

@@ -21,13 +21,22 @@ def initialize_knowledge_base():
     """Inicializa la base de conocimiento"""
     if 'kb_loaded' not in st.session_state:
         kb = KnowledgeBase()
-        if os.path.exists("unex_content.json"):
-            with st.spinner('📚 Cargando base de conocimiento...'):
-                kb.load_from_json("unex_content.json")
-            st.session_state.kb_loaded = True
-            return True
-        else:
-            return False
+        
+        # Buscar archivos de datos disponibles
+        files_to_try = [
+            "unex_content_enhanced.json",
+            "unex_content.json"
+        ]
+        
+        for json_file in files_to_try:
+            if os.path.exists(json_file):
+                with st.spinner('📚 Cargando base de conocimiento...'):
+                    kb.load_from_json(json_file)
+                st.session_state.kb_loaded = True
+                st.session_state.data_file = json_file
+                return True
+        
+        return False
     return True
 
 def format_response(response):
@@ -238,7 +247,7 @@ def main():
                 Base de conocimiento no disponible
             </div>
             """, unsafe_allow_html=True)
-            st.info("💡 Ejecuta primero `python web_scraper.py` para recopilar datos.")
+            st.info("💡 Ejecuta primero `python web_scraper_new.py` o `python web_scraper.py` para recopilar datos.")
         
         st.markdown("---")
         

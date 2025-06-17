@@ -114,7 +114,15 @@ class KnowledgeBase:
             return
         
         with open(json_file, 'r', encoding='utf-8') as f:
-            content_data = json.load(f)
+            data = json.load(f)
+        
+        # Verificar si el archivo tiene el formato nuevo con metadatos
+        if isinstance(data, dict) and 'content' in data:
+            content_data = data['content']
+            self.logger.info(f"Loading enhanced data format with {data.get('scraping_stats', {}).get('total_pages', len(content_data))} pages")
+        else:
+            # Formato antiguo
+            content_data = data
         
         self.add_documents(content_data)
         self.logger.info(f"Knowledge base updated with data from {json_file}")
@@ -122,15 +130,26 @@ class KnowledgeBase:
 if __name__ == "__main__":
     kb = KnowledgeBase()
     
-    # Si existe el archivo de datos, cargar la base de conocimiento
-    if os.path.exists("unex_content.json"):
-        kb.load_from_json("unex_content.json")
-        
+    # Buscar archivos de datos disponibles
+    files_to_try = [
+        "unex_content_enhanced.json",
+        "unex_content.json"
+    ]
+    
+    file_found = False
+    for json_file in files_to_try:
+        if os.path.exists(json_file):
+            print(f"Encontrado archivo: {json_file}")
+            kb.load_from_json(json_file)
+            file_found = True
+            break
+    
+    if not file_found:
+        print("No se encontró ningún archivo de datos. Ejecuta primero web_scraper.py o web_scraper_new.py")
+    else:
         # Prueba de búsqueda
         results = kb.search("¿Qué estudios se pueden hacer en la UEx?", n_results=3)
         for i, result in enumerate(results):
             print(f"\n--- Resultado {i+1} ---")
             print(f"URL: {result['metadata']['url']}")
             print(f"Contenido: {result['content'][:200]}...")
-    else:
-        print("No se encontró unex_content.json. Ejecuta primero web_scraper.py")

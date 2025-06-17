@@ -11,3 +11,4 @@ langchain-community
 chromadb
 tiktoken
 PyPDF2
+PyMuPDF
