@@ -1,0 +1,13 @@
+transformers
+torch
+requests
+beautifulsoup4
+sentence-transformers
+faiss-cpu
+streamlit
+python-dotenv
+langchain
+langchain-community
+chromadb
+tiktoken
+PyPDF2
